@@ -43,18 +43,8 @@ class SecureJwt
         return $encrypted;
     }
 
-    /**
-     * @param string $token
-     *
-     * @return string
-     *
-     * @throws \ParagonIE\Halite\Alerts\InvalidKey
-     * @throws \ParagonIE\Halite\Alerts\InvalidMessage
-     * @throws \ParagonIE\Halite\Alerts\InvalidType
-     */
     public function decryptToken($token = '') {
-        $decrypted = Symmetric::decrypt($token, $this->key);
+        $decyrpted = Symmetric::decrypt($token, $this->key);
 
-        return $decrypted;
     }
 }
