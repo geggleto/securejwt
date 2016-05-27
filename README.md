@@ -3,8 +3,8 @@
 
 ## Pre-Req
 
-Libsodium is installed and configured in your environment. Our friends over at Paragoonie have a wonderful document to 
-help you out. https://paragonie.com/book/pecl-libsodium/read/00-intro.md#installing-libsodium
+Libsodium is installed and configured in your environment. Our friends over at ParagonIE have a wonderful document to 
+help you out. [Read it here](https://paragonie.com/book/pecl-libsodium/read/00-intro.md#installing-libsodium).
 
 ## Installation
 ```php
