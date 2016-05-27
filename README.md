@@ -19,43 +19,29 @@ composer require geggleto/securejwt
 
 ```php
 
-// Construct your JWT and get the token string
+    $config = new \Lcobucci\JWT\Builder(); // This object helps to simplify the creation of the dependencies
+    // instead of using "?:" on constructors.
 
-use Lcobucci\JWT\Configuration;
+    $token = $config->setIssuer('http://example.com') // Configures the issuer (iss claim)
+        ->setAudience('http://example.org') // Configures the audience (aud claim)
+        ->setId('4f1g23a12aa', true) // Configures the id (jti claim), replicating as a header item
+        ->setIssuedAt(time()) // Configures the time that the token was issue (iat claim)
+        ->setNotBefore(time() + 60) // Configures the time that the token can be used (nbf claim)
+        ->setExpiration(time() + 3600) // Configures the expiration time of the token (exp claim)
+        ->set('uid', 1) // Configures a new claim, called "uid"
+        ->getToken(); // Retrieves the generated token
 
-$config = new Configuration(); // This object helps to simplify the creation of the dependencies
-                               // instead of using "?:" on constructors.
+    $secureJwt = new \SecureJwt\SecureJwt('./sec/encryption.key');
 
-$token = $config->createBuilder()->setIssuer('http://example.com') // Configures the issuer (iss claim)
-                                 ->setAudience('http://example.org') // Configures the audience (aud claim)
-                                 ->setId('4f1g23a12aa', true) // Configures the id (jti claim), replicating as a header item
-                                 ->setIssuedAt(time()) // Configures the time that the token was issue (iat claim)
-                                 ->setNotBefore(time() + 60) // Configures the time that the token can be used (nbf claim)
-                                 ->setExpiration(time() + 3600) // Configures the expiration time of the token (exp claim)
-                                 ->set('uid', 1) // Configures a new claim, called "uid"
-                                 ->getToken(); // Retrieves the generated token
-
-
-// Initialize SecureJWT
-$secureJwt = new SecureJwt('/path/to/your/key/file.key');
-
-$securedJWT = $secureJwt->encryptToken($token);
+    $securedToken = $secureJwt->encryptToken((string)$token); //<--- This is the encrypted token
 
 ```
 
 3. Decrypting your tokens
 
 ```php
-//assumed $securedJwt is the secured token
+    $tokenString = $secureJwt->decryptToken($securedToken);
 
-$secureJwt = new SecureJwt('/path/to/your/key/file.key');
-
-$token = $secureJwt->decryptToken($securedJwt); 
-
-use Lcobucci\JWT\Configuration;
-
-$config = new Configuration();
-$token = $config->getParser()->parse((string) $token); // Parses from a string
-// ^ JWT :)
+    $newToken = (new \Lcobucci\JWT\Parser())->parse($tokenString);
 
 ```
